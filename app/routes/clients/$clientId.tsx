@@ -1,13 +1,14 @@
 import { faPencil, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Client } from "@prisma/client";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Form, Outlet, useCatch, useLoaderData, useSubmit } from "@remix-run/react";
 import React from "react";
 import invariant from "tiny-invariant";
-import { Button, FlexHeader, FlexList, ItemBox, Link } from "~/components";
+import { FlexHeader, FlexList, ItemBox, Link } from "~/components";
 import { Label } from "~/components/Label";
-import { deleteClient, editClient, getClient } from "~/models/client.server";
+import { editClient, getClient } from "~/models/client.server";
 import { getNotes } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
 
@@ -26,16 +27,10 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
-  const userId = await requireUserId(request)
+  await requireUserId(request)
   invariant(params.clientId, 'clientId not found')
   const id = params.clientId
   const formData = await request.formData()
-  const button = formData.get('button')
-
-  if (button === 'delete') {
-    await deleteClient({ id, userId })
-    return redirect('/')
-  }
 
   const name = formData.get('name')
   const phoneNumber = formData.get('phoneNumber')
@@ -64,7 +59,7 @@ export const meta: MetaFunction = ({ data }: { data: { client: Client } | undefi
   };
 };
 
-const headerDefaultClasses = "flex justify-between items-center p-4 bg-component-background shadow"
+const headerDefaultClasses = "flex justify-between items-center md:rounded p-4 bg-component-background shadow"
 
 export default function ClientRoute() {
   const { client, notes } = useLoaderData<typeof loader>()
@@ -77,9 +72,16 @@ export default function ClientRoute() {
   return (
     <FlexList>
       <Form method="put" onChange={handleSubmit}>
-        <div className={headerDefaultClasses}>
-          <input type="text" name="name" className="text-4xl font-bold" defaultValue={client.name} />
-          <Button type="submit" name="button" value="delete" isRounded kind="danger" icon={faTrash} />
+        <div className="md:p-4">
+          <FlexList gap={2}>
+            <div className="hidden md:block">
+              <Label>Name</Label>
+            </div>
+            <div className={headerDefaultClasses}>
+              <input type="text" name="name" className="text-4xl font-bold" defaultValue={client.name} />
+              <Link to="delete" kind="danger" isRounded><FontAwesomeIcon icon={faTrash} /></Link>
+            </div>
+          </FlexList>
         </div>
         <FlexList pad={4}>
           <FlexList gap={2}>

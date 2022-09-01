@@ -1,6 +1,6 @@
 import type { ButtonKind } from "~/components"
 
-export const defaultButtonStyles = "flex items-center gap-2 rounded justify-center font-bold py-2 px-4 h-8 border-0 bg-component-background-alt text-text-subdued hover:bg-component-background-darken"
+export const defaultButtonStyles = "flex items-center gap-2 rounded justify-center font-bold py-2 px-4 h-8 border-0 bg-component-background-alt text-text-subdued transition-all hover:bg-component-background-darken"
 
 export const additionalStyles = ({ isDisabled, kind }: { isDisabled: boolean, kind: ButtonKind }) => {
   if (isDisabled) {

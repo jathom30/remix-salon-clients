@@ -1,8 +1,8 @@
-import { Form, Link, useNavigate, useParams } from "@remix-run/react";
+import { Form, useNavigate, useParams } from "@remix-run/react";
 import type { ActionArgs } from "@remix-run/server-runtime";
 import { redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
-import { Button, Modal, FlexList } from "~/components";
+import { Button, Modal, FlexList, Link } from "~/components";
 import { createNote } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
 
@@ -32,7 +32,7 @@ export default function NewNote() {
           <h2 className="text-lg font-bold">New Note</h2>
           <textarea name="body" placeholder="Your new note here..." className="w-full border p-2 rounded border-text-subdued" rows={10} />
           <div className="flex gap-4 justify-end">
-            <Link to={`/clients/${params.clientId}`}><Button>Cancel</Button></Link>
+            <Link to={`/clients/${params.clientId}`}>Cancel</Link>
             <Button type="submit" kind="primary">Save</Button>
           </div>
         </FlexList>

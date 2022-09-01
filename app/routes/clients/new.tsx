@@ -6,6 +6,7 @@ import { Label } from "~/components/Label";
 import { requireUserId } from "~/session.server";
 import { validateEmail, validateName, validatePhoneNumber } from "~/utils";
 import { createClient } from "~/models/client.server";
+import { createNote } from "~/models/note.server";
 
 
 export async function action({ request }: ActionArgs) {
@@ -14,6 +15,7 @@ export async function action({ request }: ActionArgs) {
   const name = formData.get('name')
   const phoneNumber = formData.get('phoneNumber')
   const email = formData.get('email')
+  const noteBody = formData.get('note')
 
   if (!validateName(name)) {
     return json(
@@ -35,6 +37,9 @@ export async function action({ request }: ActionArgs) {
   }
 
   const client = await createClient({ name, phoneNumber, email, userId })
+  if (noteBody && typeof noteBody === 'string') {
+    await createNote({ body: noteBody, clientId: client.id })
+  }
 
   return redirect(`/clients/${client.id}`)
 }
