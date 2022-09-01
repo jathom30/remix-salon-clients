@@ -1,8 +1,8 @@
-import { Form, Link, useCatch, useLoaderData, useNavigate, useParams } from "@remix-run/react"
+import { Form, useCatch, useLoaderData, useNavigate, useParams } from "@remix-run/react"
 import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime"
 import { json, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant"
-import { Button, CollapsingButton, FlexHeader, FlexList, Modal } from "~/components"
+import { Button, FlexHeader, FlexList, Modal, Link } from "~/components"
 import { deleteNote, editNote, getNote } from "~/models/note.server"
 import { requireUserId } from "~/session.server"
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -64,11 +64,11 @@ export default function EditNote() {
         <FlexList>
           <FlexHeader>
             <h2 className="text-lg font-bold">Edit Note</h2>
-            <CollapsingButton isRounded kind="danger" type="submit" name="button" value="delete" icon={faTrash}>Delete</CollapsingButton>
+            <Button isCollapsing isRounded kind="danger" type="submit" name="button" value="delete" icon={faTrash}>Delete</Button>
           </FlexHeader>
           <textarea defaultValue={note.body} name="body" placeholder="Your new note here..." className="w-full border p-2 rounded border-text-subdued" rows={10} />
           <div className="flex gap-4 justify-end">
-            <Link to={`/clients/${params.clientId}`}><Button>Cancel</Button></Link>
+            <Link to={`/clients/${params.clientId}`}>Cancel</Link>
             <Button type="submit" kind="primary" name="button" value="edit">Save</Button>
           </div>
         </FlexList>

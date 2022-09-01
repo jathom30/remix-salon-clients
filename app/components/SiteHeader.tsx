@@ -1,7 +1,7 @@
 import { faPlus, faSignOut, faUser } from "@fortawesome/free-solid-svg-icons";
-import { Form, Link } from "@remix-run/react";
+import { Form, Link as RemixLink } from "@remix-run/react";
 import { useUser } from "~/utils";
-import { MaxWidth, CollapsingButton } from ".";
+import { MaxWidth, Button, Link } from ".";
 
 export function SiteHeader() {
   const user = useUser()
@@ -10,33 +10,24 @@ export function SiteHeader() {
       <MaxWidth>
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-xl font-bold">
-            <Link to="/" prefetch="intent">{user.email}'s Clients</Link>
+            <RemixLink to="/" prefetch="intent">{user.email}'s Clients</RemixLink>
           </h1>
 
           <div className="flex gap-1">
-            <Link to="/clients/new" prefetch="intent">
-              <CollapsingButton
-                icon={faPlus}
-                type="submit" kind="primary" isRounded
-              >
-                New Client
-              </CollapsingButton>
+            <Link to="/clients/new" icon={faPlus} isCollapsing type="submit" kind="primary" isRounded>
+              New Client
             </Link>
-            <Link to="/user">
-              <CollapsingButton
-                icon={faUser}
-                type="submit" kind="secondary" isRounded
-              >
-                User Details
-              </CollapsingButton>
+            <Link to="/user" isCollapsing icon={faUser} kind="secondary" isRounded>
+              User Details
             </Link>
             <Form action="/logout" method="post">
-              <CollapsingButton
+              <Button
+                isCollapsing
                 icon={faSignOut}
                 type="submit" isRounded
               >
                 Logout
-              </CollapsingButton>
+              </Button>
             </Form>
           </div>
         </div>

@@ -2,10 +2,10 @@ import { faPencil, faPlusCircle, faTrash } from "@fortawesome/free-solid-svg-ico
 import type { Client } from "@prisma/client";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, Outlet, useCatch, useLoaderData, useSubmit } from "@remix-run/react";
+import { Form, Outlet, useCatch, useLoaderData, useSubmit } from "@remix-run/react";
 import React from "react";
 import invariant from "tiny-invariant";
-import { Button, CollapsingButton, FlexHeader, FlexList, ItemBox } from "~/components";
+import { Button, FlexHeader, FlexList, ItemBox, Link } from "~/components";
 import { Label } from "~/components/Label";
 import { deleteClient, editClient, getClient } from "~/models/client.server";
 import { getNotes } from "~/models/note.server";
@@ -34,7 +34,7 @@ export async function action({ request, params }: ActionArgs) {
 
   if (button === 'delete') {
     await deleteClient({ id, userId })
-    return redirect('/clients')
+    return redirect('/')
   }
 
   const name = formData.get('name')
@@ -97,8 +97,8 @@ export default function ClientRoute() {
         <FlexList gap={2}>
           <div className="flex gap-4 items-center justify-between">
             <Label>Notes</Label>
-            <Link to="new">
-              <CollapsingButton icon={faPlusCircle} isRounded kind="secondary">Create New Note</CollapsingButton>
+            <Link to="new" icon={faPlusCircle} isRounded kind="secondary" isCollapsing>
+              Create New Note
             </Link>
             <Outlet />
           </div>
@@ -107,7 +107,7 @@ export default function ClientRoute() {
               <FlexList>
                 <FlexHeader>
                   <span className="text-text-subdued text-xs">{new Date(note.updatedAt).toDateString()}</span>
-                  <Link to={`edit/${note.id}`}><CollapsingButton isRounded icon={faPencil}>Edit</CollapsingButton></Link>
+                  <Link to={`edit/${note.id}`} isRounded icon={faPencil}>Edit</Link>
                 </FlexHeader>
                 <FlexList gap={2}>
                   {note.body.split('\n\n').map((line, i) => (
@@ -118,7 +118,12 @@ export default function ClientRoute() {
             </ItemBox>
           ))}
           {notes.length === 0 ? (
-            <span>No notes found</span>
+            <ItemBox>
+              <div className="flex flex-col items-center justify-center gap-2 p-4">
+                <span className="text-lg text-text-subdued font-bold">No notes found...</span>
+                <Link to="new" kind="primary" isRounded>Create your first for this client</Link>
+              </div>
+            </ItemBox>
           ) : null}
         </FlexList>
       </div>

@@ -1,9 +1,9 @@
 import { faPlus, faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { LoaderArgs } from "@remix-run/node";
-import { Form, Link, useLoaderData, useSearchParams } from "@remix-run/react";
+import { Form, useLoaderData, useSearchParams, Link as RemixLink } from "@remix-run/react";
 import { json } from '@remix-run/node'
-import { Button, FlexList, Input } from "~/components";
+import { Button, FlexList, Input, Link } from "~/components";
 import { getClients } from "~/models/client.server";
 import { requireUserId } from "~/session.server";
 
@@ -43,16 +43,12 @@ export default function Index() {
       </Form>
       <FlexList gap={2}>
         {clientList.map(client => (
-          <Link key={client.id} className={linkClassNames} prefetch="intent" to={`/clients/${client.id}`}>{client.name}</Link>
+          <RemixLink key={client.id} className={linkClassNames} prefetch="intent" to={`/clients/${client.id}`}>{client.name}</RemixLink>
         ))}
         {clientList.length === 0 ? !searchParam ? (
           <FlexList items="center">
             <span>Looks like you don't have any clients created yet</span>
-            <Link to="new">
-              <Button kind="primary" icon={faPlus}>
-                Create your first here
-              </Button>
-            </Link>
+            <Link to="/clients/new" kind="primary" icon={faPlus}>Create your first here</Link>
           </FlexList>
         ) : (
           <FlexList items="center">
