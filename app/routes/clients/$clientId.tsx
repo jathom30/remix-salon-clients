@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import type { Client } from "@prisma/client";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Outlet, useCatch, useLoaderData, useNavigate, useSubmit } from "@remix-run/react";
+import { Form, Outlet, useCatch, useLoaderData, useSubmit } from "@remix-run/react";
 import React from "react";
 import invariant from "tiny-invariant";
 import { FlexHeader, FlexList, ItemBox, Link } from "~/components";
@@ -64,7 +64,6 @@ const headerDefaultClasses = "flex justify-between items-center md:rounded p-4 b
 export default function ClientRoute() {
   const { client, notes } = useLoaderData<typeof loader>()
   const submit = useSubmit()
-  const navigate = useNavigate()
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     submit(e.currentTarget, { replace: true })
