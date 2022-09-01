@@ -64,7 +64,7 @@ export default function EditNote() {
         <FlexList>
           <FlexHeader>
             <h2 className="text-lg font-bold">Edit Note</h2>
-            <Button isCollapsing isRounded kind="danger" type="submit" name="button" value="delete" icon={faTrash}>Delete</Button>
+            <Link to='delete' isCollapsing isRounded kind="danger" type="submit" name="button" value="delete" icon={faTrash}>Delete</Link>
           </FlexHeader>
           <textarea defaultValue={note.body} name="body" placeholder="Your new note here..." className="w-full border p-2 rounded border-text-subdued" rows={10} />
           <div className="flex gap-4 justify-end">

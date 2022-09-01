@@ -1,11 +1,11 @@
-import { Form, useLoaderData, useNavigate, useParams } from "@remix-run/react";
-import type { LoaderArgs, ActionArgs, MetaFunction } from "@remix-run/server-runtime";
+import { Button, FlexList, Link, Modal } from "~/components";
+import { requireUserId } from "~/session.server";
+import type { LoaderArgs, ActionArgs } from "@remix-run/server-runtime";
 import { json, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
-import { Button, FlexList, Link, Modal } from "~/components";
-import { deleteClient, getClient } from "~/models/client.server";
-import { requireUserId } from "~/session.server";
-import type { Client } from "@prisma/client";
+import { getClient } from "~/models/client.server";
+import { deleteNote } from "~/models/note.server";
+import { Form, useNavigate, useParams } from "@remix-run/react";
 
 export async function loader({ request, params }: LoaderArgs) {
   const userId = await requireUserId(request)
@@ -19,28 +19,18 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
-  const userId = await requireUserId(request)
-  invariant(params.clientId, 'clientId not found')
-  const id = params.clientId
+  await requireUserId(request)
 
-  await deleteClient({ id, userId })
-  return redirect('/')
+  invariant(params.noteId, 'noteId not found')
+  invariant(params.clientId, 'clientId not found')
+  const noteId = params.noteId
+  const clientId = params.clientId
+
+  await deleteNote(noteId)
+  return redirect(`/clients/${clientId}`)
 }
 
-export const meta: MetaFunction = ({ data }: { data: { client: Client } | undefined }) => {
-  if (!data) {
-    return {
-      title: "Client not found",
-      description: "This client could not be found"
-    }
-  }
-  return {
-    title: `Delete ${data.client.name}?`,
-  };
-};
-
-export default function DeleteClient() {
-  const { client } = useLoaderData<typeof loader>()
+export default function DeleteNote() {
   const navigate = useNavigate()
   const params = useParams()
   return (
@@ -48,10 +38,10 @@ export default function DeleteClient() {
       <FlexList>
         <FlexList items="center">
           <h3 className="text-xl font-bold text-danger">Are you sure?</h3>
-          <p>This will permenantly delete <strong>{client.name}</strong> and all of their notes!</p>
+          <p>This will permenantly delete this note!</p>
         </FlexList>
         <div className="flex gap-4 justify-end">
-          <Link to={`/clients/${params.clientId}`}>Cancel</Link>
+          <Link to={`/clients/${params.clientId}/edit/${params.noteId}`}>Cancel</Link>
           <Form method="delete">
             <Button type="submit" kind="danger">Delete</Button>
           </Form>
