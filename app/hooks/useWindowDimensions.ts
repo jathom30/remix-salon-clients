@@ -1,10 +1,4 @@
 import { useEffect, useState } from "react"
-import resolveConfig from 'tailwindcss/resolveConfig'
-import tailwindConfig from '../../tailwind.config'
-
-const fullConfig = resolveConfig(tailwindConfig)
-
-const screens = fullConfig.theme?.screens as unknown as { sm: string; md: string; lg: string; xl: string; '2xl': string }
 
 export const useWindowDimensions = () => {
   const [dimensions, setDimensions] = useState({
@@ -26,15 +20,6 @@ export const useWindowDimensions = () => {
     }
   }, [])
 
-  const breakpoint = () => {
-    const keys = Object.keys(screens) as (keyof typeof screens)[]
-    return keys.reduce((acc: keyof typeof screens, key) => {
-      if (dimensions.width >= parseInt(screens[key])) {
-        return key
-      }
-      return acc
-    }, '2xl')
-  }
-
-  return { dimensions, breakpoint: breakpoint(), isMobile: dimensions.width <= parseInt(screens.md) }
+  // ? 768 is tailwind md breakpoint
+  return { dimensions, isMobile: dimensions.width <= 768 }
 }
