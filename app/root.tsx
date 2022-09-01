@@ -1,0 +1,65 @@
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from "@remix-run/react";
+
+import tailwindStylesheetUrl from "./styles/tailwind.css";
+import { getUser } from "./session.server";
+import { useOptionalUser } from "./utils";
+import { PageWrapper } from "./components";
+
+export const links: LinksFunction = () => {
+  return [
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com' },
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Fascinate&family=Poppins:wght@100;400;700&display=swap' },
+    { rel: "stylesheet", href: tailwindStylesheetUrl },
+  ];
+};
+
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "Remix Notes",
+  viewport: "width=device-width,initial-scale=1",
+});
+
+export async function loader({ request }: LoaderArgs) {
+  return json({
+    user: await getUser(request),
+  });
+}
+
+export default function App() {
+  const user = useOptionalUser();
+  return (
+    <html lang="en" className="h-full bg-background">
+      <head>
+        <Meta />
+        <Links />
+      </head>
+      <body className="h-full">
+        {user ? (
+          <PageWrapper>
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+          </PageWrapper>
+        ) : (
+          <>
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            <LiveReload />
+          </>
+        )}
+      </body>
+    </html>
+  );
+}
