@@ -5,7 +5,7 @@ import invariant from "tiny-invariant";
 import { Button, FlexList, Link, Modal } from "~/components";
 import { deleteClient, getClient } from "~/models/client.server";
 import { requireUserId } from "~/session.server";
-import { Client } from "@prisma/client";
+import type { Client } from "@prisma/client";
 
 export async function loader({ request, params }: LoaderArgs) {
   const userId = await requireUserId(request)

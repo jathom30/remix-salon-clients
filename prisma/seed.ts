@@ -44,7 +44,6 @@ async function seed() {
     data: {
       body: "Hello, world!",
       clientId: john.id,
-      userId: user.id,
     },
   });
 
@@ -52,7 +51,6 @@ async function seed() {
     data: {
       body: "Hello, world!",
       clientId: jill.id,
-      userId: user.id
     },
   });
 
