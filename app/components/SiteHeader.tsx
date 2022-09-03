@@ -10,7 +10,7 @@ export function SiteHeader() {
       <MaxWidth>
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-xl font-bold">
-            <RemixLink to="/" prefetch="intent">{user.firstName}'s Clients</RemixLink>
+            <RemixLink to="/" prefetch="intent">{user.firstName || user.email}'s Clients</RemixLink>
           </h1>
 
           <div className="flex gap-1">

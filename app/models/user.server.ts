@@ -30,6 +30,25 @@ export async function createUser(email: User["email"], password: string, firstNa
   });
 }
 
+export async function updateUser(id: User['id'], user: Partial<User>) {
+  return prisma.user.update({
+    where: { id },
+    data: user,
+  })
+}
+
+export async function updatePassword(userId: User['id'], password: string) {
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  return prisma.password.update({
+    where: { userId },
+    data: {
+      hash: hashedPassword
+    }
+  })
+
+}
+
 export async function deleteUserByEmail(email: User["email"]) {
   return prisma.user.delete({ where: { email } });
 }

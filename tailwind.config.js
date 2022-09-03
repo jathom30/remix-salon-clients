@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   content: ["./app/**/*.{ts,tsx,jsx,js}"],
@@ -27,5 +28,14 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({addBase, theme}) => {
+      addBase({
+        'html': {
+          // add default font color
+          color: theme('colors.text')
+        }
+      })
+    })
+  ],
 };

@@ -1,7 +1,6 @@
 import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react"
-import { useWindowDimensions } from "~/hooks/useWindowDimensions";
 import { additionalStyles, defaultButtonStyles } from "~/styleUtils";
 
 export type ButtonKind = 'default' | 'primary' | 'danger' | 'text' | 'secondary'
@@ -21,8 +20,6 @@ export type ButtonProps = {
 }
 
 export function Button({ isCollapsing = false, onClick, tabIndex, icon, name, value, isDisabled = false, isRounded = false, type = 'button', kind = 'default', children }: ButtonProps) {
-  const { isMobile } = useWindowDimensions()
-
   return (
     <button
       name={name}
@@ -34,7 +31,7 @@ export function Button({ isCollapsing = false, onClick, tabIndex, icon, name, va
       tabIndex={tabIndex}
     >
       {icon ? <FontAwesomeIcon icon={icon} /> : null}
-      {isCollapsing && isMobile ? null : children}
+      <div className={`${isCollapsing ? 'hidden md:block' : ''}`}>{children}</div>
     </button>
   )
 }
